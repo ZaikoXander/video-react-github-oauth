@@ -3,7 +3,11 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-const Home: NextPage = () => {
+import { useSession, signIn, signOut } from "next-auth/react"
+
+export default function Home() {
+  const { data: session } = useSession()
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,6 +17,8 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
+        {!session && <button onClick={() => signIn()}>Sign in with GitHub</button>}
+        {session && <button onClick={() => signOut()}>Sign out ({session.user?.name})</button>}
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -68,5 +74,3 @@ const Home: NextPage = () => {
     </div>
   )
 }
-
-export default Home
